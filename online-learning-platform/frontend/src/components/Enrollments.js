@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import UserHeader from './UserHeader';
 
 const Enrollments = () => {
   const [enrollments, setEnrollments] = useState([]);
@@ -7,7 +8,9 @@ const Enrollments = () => {
   useEffect(() => {
     const fetchEnrollments = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/enrollments');
+        const response = await axios.get('http://localhost:3000/api/enrollments', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
         setEnrollments(response.data);
       } catch (error) {
         console.error(error);
@@ -19,6 +22,7 @@ const Enrollments = () => {
 
   return (
     <div className="container">
+        <UserHeader />
       <h2>Enrollments</h2>
       <ul>
         {enrollments.map(enrollment => (

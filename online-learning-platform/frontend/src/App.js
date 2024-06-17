@@ -7,19 +7,44 @@ import Login from './components/Login';
 import Courses from './components/Courses';
 import Enrollments from './components/Enrollments';
 import Admin from './components/Admin';
+import ProtectedRoute from './components/ProtectedRoute';
+import './App.css';
 
 const App = () => {
   return (
+    <div className="home-page">
     <Router>
       <Routes>
         <Route exact path="/" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/enrollments" element={<Enrollments />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/courses"
+          element={
+            <ProtectedRoute role="student">
+              <Courses />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/enrollments"
+          element={
+            <ProtectedRoute role="student">
+              <Enrollments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="admin">
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
+    </div>
   );
 }
 
