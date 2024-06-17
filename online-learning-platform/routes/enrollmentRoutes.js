@@ -1,10 +1,11 @@
 const express = require('express');
 const Enrollment = require('../models/Enrollment');
+const { authenticateJWT, authorizeAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Create enrollment
-router.post('/', async (req, res) => {
+router.post('/', authenticateJWT, async (req, res) => {
   const { userId, courseId } = req.body;
   try {
     const enrollment = await Enrollment.create({ userId, courseId });
@@ -14,8 +15,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Read all enrollments
-router.get('/', async (req, res) => {
+// Read all enrollments (accessible to both admins and students)
+router.get('/', authenticateJWT, async (req, res) => {
   try {
     const enrollments = await Enrollment.findAll();
     res.json(enrollments);
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
 });
 
 // Read enrollment by id
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticateJWT, authorizeAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const enrollment = await Enrollment.findByPk(id);
@@ -40,7 +41,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update enrollment
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateJWT, authorizeAdmin, async (req, res) => {
   const { id } = req.params;
   const { userId, courseId } = req.body;
   try {
@@ -59,13 +60,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete enrollment
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateJWT, authorizeAdmin, async (req, res) => {
   const { id } = req.params;
   try {
     const enrollment = await Enrollment.findByPk(id);
     if (enrollment) {
       await enrollment.destroy();
-      res.json({ message: 'Enrollment deleted' });
+      res.json({ message: 'Enrollment deleted successfully' });
     } else {
       res.status(404).json({ error: 'Enrollment not found' });
     }

@@ -1,26 +1,37 @@
+require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
+const cors = require('cors');
 const sequelize = require('./config/database');
+
+// Models
 const User = require('./models/User');
 const Course = require('./models/Course');
 const Enrollment = require('./models/Enrollment');
 
-const app = express();
-app.use(bodyParser.json());
-
-// Sync models
-sequelize.sync();
-
 // Routes
-const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/auth');
 const courseRoutes = require('./routes/courseRoutes');
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const studentRoutes = require('./routes/userRoutes');
 
-app.use('/users', userRoutes);
-app.use('/courses', courseRoutes);
-app.use('/enrollments', enrollmentRoutes);
+const app = express();
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
+app.use('/api/students', studentRoutes);
+
+// Database synchronization
+sequelize.sync()
+  .then(() => {
+    console.log('Database synchronized');
+    app.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  })
+  .catch(err => console.log(err));
