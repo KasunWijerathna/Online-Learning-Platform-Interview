@@ -17,13 +17,15 @@ const theme = createTheme();
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
-      const { token, role } = response.data;
+      const { token, role,  userId} = response.data;
+      localStorage.setItem('userId', userId);
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
 

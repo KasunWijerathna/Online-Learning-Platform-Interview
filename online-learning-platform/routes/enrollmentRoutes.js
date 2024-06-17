@@ -60,7 +60,7 @@ router.put('/:id', authenticateJWT, authorizeAdmin, async (req, res) => {
 });
 
 // Delete enrollment
-router.delete('/:id', authenticateJWT, authorizeAdmin, async (req, res) => {
+router.delete('/:id', authenticateJWT, async (req, res) => {
   const { id } = req.params;
   try {
     const enrollment = await Enrollment.findByPk(id);

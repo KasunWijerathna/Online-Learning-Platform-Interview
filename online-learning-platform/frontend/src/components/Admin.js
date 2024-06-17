@@ -117,7 +117,7 @@ const Admin = () => {
     };
 
     fetchData();
-  }, []);
+  }, [students, enrollments, courses]);
 
   const handleAddOrUpdate = async (entity, type) => {
     try {
@@ -365,6 +365,7 @@ const Admin = () => {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Student Id</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>Actions</TableCell>
@@ -373,6 +374,7 @@ const Admin = () => {
                 <TableBody>
                   {students.map((student) => (
                     <TableRow key={student.id}>
+                      <TableCell>{student.id}</TableCell>
                       <TableCell>{student.name}</TableCell>
                       <TableCell>{student.email}</TableCell>
                       <TableCell>
