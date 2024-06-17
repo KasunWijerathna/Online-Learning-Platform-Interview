@@ -27,6 +27,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import AdminHeader from "./AdminHeader";
 
+
 const ContainerStyled = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(4),
   paddingBottom: theme.spacing(4),
@@ -117,7 +118,7 @@ const Admin = () => {
     };
 
     fetchData();
-  }, [students, enrollments, courses]);
+  }, []);
 
   const handleAddOrUpdate = async (entity, type) => {
     try {
